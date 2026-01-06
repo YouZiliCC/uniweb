@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}使用帮助 - Uniweb{% endblock %}
+{% block content %}
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <i class="fa-solid fa-book mr-3 text-primary-500"></i>使用帮助
+                </h1>
+            </div>
+            
+            <div class="px-6 py-6 space-y-8">
+                <!-- 快速开始 -->
+                <section>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                        快速开始
+                    </h2>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-300 ml-2">
+                        <li><strong>注册账号</strong> - 使用学号和邮箱注册</li>
+                        <li><strong>创建/加入工作组</strong> - 创建新组或申请加入现有组</li>
+                        <li><strong>创建项目</strong> - 在工作组中创建项目并配置 Docker</li>
+                        <li><strong>启动容器</strong> - 启动容器，通过 WebShell 管理</li>
+                        <li><strong>部署应用</strong> - 在WebShell中操作容器，部署和管理应用</li>
+                        <li><strong>访问应用</strong> - 通过映射端口访问运行中的服务</li>
+                    </ol>
+                </section>
+
+                <!-- 工作组 -->
+                <section>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                        工作组
+                    </h2>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-300 ml-2">
+                        <li>• 每位用户只能属于一个工作组</li>
+                        <li>• 组长可审批申请、管理成员、转让组长、创建新项目</li>
+                        <li>• 组内成员共享项目管理权限</li>
+                    </ul>
+                </section>
+
+                <!-- 项目管理 -->
+                <section>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                        项目管理
+                    </h2>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-300 ml-2">
+                        <li>• <strong>创建项目</strong> - 填写名称、描述，选择 Docker 镜像和端口</li>
+                        <li>• <strong>启动/停止</strong> - 控制容器运行状态</li>
+                        <li>• <strong>WebShell</strong> - 在浏览器中直接访问容器终端</li>
+                        <li>• <strong>访问应用</strong> - 通过映射端口访问运行中的服务</li>
+                        <li>• <strong>重置容器</strong> - 删除并重新创建容器</li>
+                    </ul>
+                </section>
+
+                <!-- 提示 -->
+                <section class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                    <h2 class="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center">
+                        提示
+                    </h2>
+                    <ul class="space-y-1 text-blue-700 dark:text-blue-300 text-sm">
+                        <li>• 个人、工作组、项目描述介绍文本支持 Markdown 格式，将在前端实时渲染</li>
+                        <li>• 可在个人、工作组、项目资料页上传主题图片，将作为头像显示</li>
+                        <li>• 点击右上角图标切换深色模式</li>
+                        <li>• 可通过注册时输入邀请码注册为教师用户</li>
+                        <li>• 对容器的内部端口、镜像的更改，需要重置容器以生效（重置将会删除容器内数据，请做好备份）</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
