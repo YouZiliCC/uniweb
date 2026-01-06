@@ -431,6 +431,7 @@ def group_edit(gid):
         return redirect(url_for("group.group_list"))
     form = GroupForm(obj=group)
     if form.validate_on_submit():
+        success = False
         # 处理图片上传
         if "gimg" in request.files:
             file = request.files["gimg"]
