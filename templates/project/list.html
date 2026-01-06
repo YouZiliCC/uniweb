@@ -73,7 +73,7 @@
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-4 sm:px-6 flex justify-between items-center">
                             <a href="{{ url_for('project.project_detail', pid=project.pid) }}" class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300">
-                                查看详情 <span aria-hidden="true">&rarr;</span>
+                                查看详情
                             </a>
                             {% if project.port %}
                                 <a href="{{ external_url }}:{{ project.port }}" target="_blank" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
