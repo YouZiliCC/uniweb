@@ -150,6 +150,10 @@
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Docker 配置</dt>
                                 <dd class="space-y-2">
                                     <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-500">镜像</span>
+                                        <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">{{ project.docker_image }}</code>
+                                    </div>
+                                    <div class="flex justify-between items-center">
                                         <span class="text-xs text-gray-500">容器名</span>
                                         <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">{{ project.docker_name }}</code>
                                     </div>
@@ -166,6 +170,39 @@
 
             <!-- Main Content -->
             <div class="lg:col-span-8 order-1 lg:order-1 space-y-8">
+                <!-- Group Members -->
+                {% if project.group and project.group.users %}
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                            <i class="fa-solid fa-users mr-2 text-primary-500"></i>小组成员
+                        </h3>
+                        <div class="flex flex-wrap gap-4">
+                            {% for user in project.group.users %}
+                            <div class="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-4 py-3 border border-gray-100 dark:border-gray-600">
+                                <div class="flex-shrink-0">
+                                    <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold shadow-sm">
+                                        {{ user.uname[:1].upper() }}
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <a href="{{ url_for('user.user_detail', uid=user.uid) }}" class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                        {{ user.uname }}
+                                        {% if user.uid == project.group.leader_id %}
+                                        <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                            组长
+                                        </span>
+                                        {% endif %}
+                                    </a>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ user.sid }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <!-- Description -->
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6">

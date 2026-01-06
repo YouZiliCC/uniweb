@@ -373,7 +373,7 @@ def get_group_by_gid(gid):
 # -------------------------------------------------------------------------------------------
 # Project CRUD 操作
 # -------------------------------------------------------------------------------------------
-def create_project(pname, gid, pinfo=None, port=None, docker_port=None):
+def create_project(pname, gid, pinfo=None, port=None, docker_port=None, docker_image=None):
     """
     创建新项目。
 
@@ -383,13 +383,15 @@ def create_project(pname, gid, pinfo=None, port=None, docker_port=None):
         gid (str): 工作组ID。
         port (int): 项目端口。
         docker_port (int): Docker映射端口。
+        docker_image (str): Docker镜像名称。
 
     返回:
         Project: 创建成功的项目对象，失败则返回None。
     """
     try:
         project = Project(
-            pname=pname, pinfo=pinfo, gid=gid, port=port, docker_port=docker_port
+            pname=pname, pinfo=pinfo, gid=gid, port=port, docker_port=docker_port,
+            docker_image=docker_image
         )
         if safe_add(project):
             logger.info(f"项目 {pname} 创建成功, ID: {project.pid}")

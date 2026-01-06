@@ -16,6 +16,7 @@ from wtforms.validators import DataRequired, Length
 from database.actions import *
 from blueprints.project import ProjectForm
 from utils.image_upload import save_uploaded_image
+from utils.docker_client import _docker_list_images
 import logging
 
 group_bp = Blueprint("group", __name__)
@@ -330,7 +331,15 @@ def project_create(gid):
     if not group:
         flash("工作组不存在", "warning")
         return redirect(url_for("group.group_list"))
-    form = ProjectForm()
+    
+    # 获取Docker镜像列表
+    images = _docker_list_images()
+    image_choices = [('', '请选择Docker镜像')]
+    for img in images:
+        # 使用镜像名称作为值和显示文本
+        image_choices.append((img['name'], f"{img['name']} ({img['size']} MB)"))
+    
+    form = ProjectForm(image_choices=image_choices)
     if form.validate_on_submit():
         project = create_project(
             pname=form.pname.data,
@@ -338,6 +347,7 @@ def project_create(gid):
             gid=group.gid,
             port=form.port.data,
             docker_port=form.docker_port.data,
+            docker_image=form.docker_image.data,
         )
         if not project:
             flash("创建项目失败，请重试", "danger")
@@ -347,7 +357,7 @@ def project_create(gid):
             return render_template("project/create.html", form=form, group=group)
         flash("项目创建成功！", "success")
         logger.info(
-            f"创建项目成功: project={form.pname.data}, pid={project.pid}, group={group.gname}, operator={current_user.uname}"
+            f"创建项目成功: project={form.pname.data}, pid={project.pid}, image={form.docker_image.data}, group={group.gname}, operator={current_user.uname}"
         )
         return redirect(url_for("group.group_detail", gid=group.gid))
     return render_template("project/create.html", form=form, group=group)

@@ -58,6 +58,19 @@
                 </div>
 
                 <div>
+                    <label for="docker_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {{ form.docker_image.label.text }}
+                    </label>
+                    <div class="mt-1">
+                        {{ form.docker_image(class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm dark:bg-gray-700 dark:text-white") }}
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">选择要使用的 Docker 镜像，用于运行项目容器</p>
+                    {% if form.docker_image.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.docker_image.errors[0] }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
                     <label for="port" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         {{ form.port.label.text }}
                     </label>

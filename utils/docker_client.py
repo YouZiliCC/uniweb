@@ -72,6 +72,44 @@ def _docker_container_status(container_name: str) -> str:
         return "stopped"
 
 
+def _docker_list_images() -> list:
+    """获取本地所有 Docker 镜像列表
+    
+    返回:
+        list: 镜像信息列表，每个元素为 dict，包含:
+            - id: 镜像ID(短)
+            - name: 镜像名称(第一个tag或<none>)
+            - tags: 所有标签列表
+            - size: 镜像大小(MB)
+            - created: 创建时间
+    """
+    if not docker_client:
+        logger.warning("Docker client 未初始化，无法获取镜像列表")
+        return []
+    try:
+        images = docker_client.images.list()
+        result = []
+        for img in images:
+            # 获取镜像标签
+            tags = img.tags if img.tags else []
+            # 镜像名称取第一个tag，没有tag则显示ID
+            name = tags[0] if tags else f"<none>:{img.short_id}"
+            # 计算镜像大小(MB)
+            size_mb = round(img.attrs.get('Size', 0) / (1024 * 1024), 2)
+            result.append({
+                'id': img.short_id,
+                'name': name,
+                'tags': tags,
+                'size': size_mb,
+                'created': img.attrs.get('Created', '')
+            })
+        logger.debug(f"获取到 {len(result)} 个镜像")
+        return result
+    except Exception as e:
+        logger.error(f"获取镜像列表失败: {e}", exc_info=True)
+        return []
+
+
 def _docker_build_image(image_name: str, path: str = None) -> bool:
     """构建 Docker 镜像（阻塞）。成功返回 True"""
     if not docker_client:

@@ -98,6 +98,7 @@ class Project(db.Model, TimestampMixin):
         db.String(512), db.ForeignKey("groups.gid", ondelete="CASCADE"), nullable=False
     )
     docker_name = db.Column(db.String(512), unique=True, default=generate_uuid)
+    docker_image = db.Column(db.String(512), nullable=True)  # Docker镜像名称
     port = db.Column(db.Integer, unique=True, nullable=True)
     docker_port = db.Column(db.Integer, unique=False, nullable=True)
 

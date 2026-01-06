@@ -12,7 +12,7 @@ from flask import (
 )
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 from database.actions import *
 from utils.redis_client import docker_status as DOCKER_STATUS
@@ -25,6 +25,7 @@ from utils.docker_client import (
     _docker_start_container,
     _docker_stop_container,
     _docker_remove_container,
+    _docker_list_images,
 )
 from utils.image_upload import save_uploaded_image
 import logging
@@ -41,6 +42,7 @@ logger = logging.getLogger(__name__)
 class ProjectForm(FlaskForm):
     pname = StringField("项目名称", validators=[DataRequired(), Length(min=3, max=100)])
     pinfo = TextAreaField("项目描述", validators=[Length(max=5000)])
+    docker_image = SelectField("Docker镜像", validators=[DataRequired()])
     port = StringField("项目端口", validators=[DataRequired(), Length(min=2, max=10)])
     docker_port = StringField(
         "Docker端口", validators=[DataRequired(), Length(min=2, max=10)]
@@ -50,7 +52,14 @@ class ProjectForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         self.original_port = kwargs.pop("original_port", None)
         self.original_docker_port = kwargs.pop("original_docker_port", None)
+        # 获取镜像列表并设置选项
+        image_choices = kwargs.pop("image_choices", None)
         super(ProjectForm, self).__init__(*args, **kwargs)
+        # 设置镜像选项
+        if image_choices:
+            self.docker_image.choices = image_choices
+        else:
+            self.docker_image.choices = [('', '暂无可用镜像')]
 
     # 自定义验证器
     def validate_port(self, port):
@@ -338,10 +347,17 @@ def project_edit(pid):
         flash("项目不存在", "warning")
         abort(404, description="项目不存在")
 
+    # 获取Docker镜像列表
+    images = _docker_list_images()
+    image_choices = [('', '请选择Docker镜像')]
+    for img in images:
+        image_choices.append((img['name'], f"{img['name']} ({img['size']} MB)"))
+
     form = ProjectForm(
         obj=project,
         original_port=project.port,
         original_docker_port=project.docker_port,
+        image_choices=image_choices,
     )
     if form.validate_on_submit():
         # 处理图片上传
@@ -364,6 +380,7 @@ def project_edit(pid):
             pinfo=form.pinfo.data,
             port=form.port.data,
             docker_port=form.docker_port.data,
+            docker_image=form.docker_image.data,
         )
         if not updated_project:
             flash("更新项目失败，请重试", "danger")
@@ -394,7 +411,7 @@ def start_docker(pid):
     if not project:
         return jsonify({"success": False, "message": "项目不存在"}), 404
 
-    image_name = current_app.config.get("IMAGE_NAME")
+    image_name = project.docker_image
     container_name = project.docker_name
 
     # 需要提前配置好端口映射

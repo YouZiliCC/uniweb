@@ -95,7 +95,6 @@ def create_app():
     app.config["HOST"] = os.getenv("HOST", "0.0.0.0")
     app.config["DEBUG"] = os.getenv("DEBUG", "False") == "True"
     # Docker配置
-    app.config["IMAGE_NAME"] = os.getenv("IMAGE_NAME", "imds:latest")
     app.config["TIMEOUT_COMMAND_EXECUTION"] = int(
         os.getenv("TIMEOUT_COMMAND_EXECUTION", 1200)
     )  # 命令执行超时时间，单位秒
