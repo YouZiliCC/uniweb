@@ -78,9 +78,11 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-500">
-                                        <span class="text-sm font-medium leading-none text-white">{{ app.user.uname[0] | upper }}</span>
-                                    </span>
+                                    {% set app_user_img = '/static/img/users/' + app.user.uid + '.png' %}
+                                    <img class="h-10 w-10 rounded-full object-cover" 
+                                         src="{{ app_user_img }}" 
+                                         alt="{{ app.user.uname }}"
+                                         onerror="this.src='/static/img/user.png';">
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
@@ -140,9 +142,11 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center min-w-0">
                                     <div class="flex-shrink-0">
-                                        <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">
-                                            <span class="text-sm font-medium leading-none text-white">{{ user.uname[0] | upper }}</span>
-                                        </span>
+                                        {% set member_img = '/static/img/users/' + user.uid + '.png' %}
+                                        <img class="h-10 w-10 rounded-full object-cover" 
+                                             src="{{ member_img }}" 
+                                             alt="{{ user.uname }}"
+                                             onerror="this.src='/static/img/user.png';">
                                     </div>
                                     <div class="ml-4 truncate">
                                         <div class="text-sm font-medium text-primary-600 dark:text-primary-400 truncate">

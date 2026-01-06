@@ -181,9 +181,11 @@
                             {% for user in project.group.users %}
                             <div class="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-4 py-3 border border-gray-100 dark:border-gray-600">
                                 <div class="flex-shrink-0">
-                                    <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold shadow-sm">
-                                        {{ user.uname[:1].upper() }}
-                                    </div>
+                                    {% set member_img = '/static/img/users/' + user.uid + '.png' %}
+                                    <img class="h-10 w-10 rounded-full object-cover border border-gray-200 dark:border-gray-600 shadow-sm" 
+                                         src="{{ member_img }}" 
+                                         alt="{{ user.uname }}"
+                                         onerror="this.src='/static/img/user.png';">
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <a href="{{ url_for('user.user_detail', uid=user.uid) }}" class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
@@ -207,7 +209,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
-                            项目描述
+                            <i class="fa-solid fa-file-lines mr-2 text-primary-500"></i>项目描述
                         </h3>
                         {% if project.pinfo %}
                             <div class="prose dark:prose-invert max-w-none markdown-content">
@@ -223,16 +225,18 @@
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg" id="comments-root">
                     <div class="px-4 py-5 sm:p-6">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
-                            评论区
+                            <i class="fa-solid fa-comments mr-2 text-primary-500"></i>评论区
                         </h3>
                         <div id="project-comments-list" class="space-y-4">
                             {% if comments and comments|length > 0 %}
                                 {% for c in comments %}
                                     <div class="flex space-x-3 comment-item p-3 rounded-lg transition-colors duration-200 {% if c.is_teacher_comment %}bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-900/30{% else %}bg-gray-50 dark:bg-gray-700/30 border border-transparent hover:bg-gray-100 dark:hover:bg-gray-700/50{% endif %}" data-comment-id="{{ c.pcid }}">
                                         <div class="flex-shrink-0">
-                                            <div class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 font-bold shadow-sm text-xs">
-                                                {{ c.user.uname[0] | upper if c.user else '?' }}
-                                            </div>
+                                            {% set comment_user_img = '/static/img/users/' + c.user.uid + '.png' if c.user else '/static/img/user.png' %}
+                                            <img class="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-600 shadow-sm" 
+                                                 src="{{ comment_user_img }}" 
+                                                 alt="{{ c.user.uname if c.user else '匿名' }}"
+                                                 onerror="this.src='/static/img/user.png';">
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <div class="flex items-center justify-between mb-1">
